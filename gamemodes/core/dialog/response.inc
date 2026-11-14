@@ -33,169 +33,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
     switch (dialogid)
     {
         case DIALOG_INFO: return 1;
-        case DIALOG_REGISTER:
-        {
-            if (response)
-            {
-                if (strlen(inputtext) < MIN_PASS_LENGTH || strlen(inputtext) > MAX_PASS_LENGTH) return ShowDialog(playerid, dialogid);
-                format(PLAYER_TEMP[playerid][pt_PASSWD], 24, "%s", inputtext);
-
-                new salt[16];
-                getRandomSalt(salt);
-                format(ACCOUNT_INFO[playerid][ac_SALT], 16, "%s", salt);
-                SHA256_PassHash(inputtext, ACCOUNT_INFO[playerid][ac_SALT], ACCOUNT_INFO[playerid][ac_PASS], 64 + 1);
-                ShowDialog(playerid, DIALOG_REGISTER_EMAIL);
-            }
-            else Kick(playerid);
-            return 1;
-        }
-        case DIALOG_REGISTER_EMAIL:
-        {
-            if (!response) return Kick(playerid);
-
-            new mail[32];
-            format(mail, 32, "%s", inputtext);
-            if (!IsValidEmail(mail))
-            {
-                SendNotification(playerid, "Correo no válido.");
-                ShowDialog(playerid, DIALOG_REGISTER_EMAIL);
-                return 1;
-            }
-
-            inline OnCheckEmail()
-            {
-                new rows;
-                if (cache_get_row_count(rows))
-                {
-                    if (rows)
-                    {
-                        SendNotification(playerid, "Este correco electrónico ya está en uso, use otro distinto.");
-                        ShowDialog(playerid, dialogid);
-                    }
-                    else
-                    {
-                        format(ACCOUNT_INFO[playerid][ac_EMAIL], 32, "%s", mail);
-
-                        ApplyActorAnimation(PLAYER_TEMP[playerid][pt_REGISTER_ACTOR], "INT_SHOP", "shop_loop", 4.1, 1, 1, 1, 0, 0);
-                        PLAYER_TEMP[playerid][pt_READING_GUIDE] = true;
-                        PLAYER_TEMP[playerid][pt_GUIDE_STEP] = 0;
-                        SendNotification(playerid, "Lee detenidamente la guía, para pasar de concepto haz clic en siguiente.");
-                        SetPlayerRulesTextDraw(playerid,
-                            Server_Rules[ PLAYER_TEMP[playerid][pt_GUIDE_STEP] ][Rule_Title],
-                            Server_Rules[ PLAYER_TEMP[playerid][pt_GUIDE_STEP] ][Rule_Info],
-                            Server_Rules[ PLAYER_TEMP[playerid][pt_GUIDE_STEP] ][Rule_Pages],
-                            PLAYER_TEMP[playerid][pt_GUIDE_STEP] + 1,
-                        sizeof(Server_Rules) );
-                        SelectTextDrawEx(playerid, 0xe8d08fFF);
-                    }
-                }
-                else Kick(playerid);
-            }
-            mysql_format(srp_db, QUERY_BUFFER, sizeof QUERY_BUFFER, "SELECT id FROM player WHERE email = '%e';", mail);
-            MySQL_TQueryInline(srp_db, using inline OnCheckEmail, QUERY_BUFFER);
-            return 1;
-        }
-        case DIALOG_LOGIN:
-        {
-            if (!response) return Kick(playerid);
-            if (!strlen(inputtext)) return ShowDialog(playerid, dialogid);
-
-            new password[64 + 1];
-            SHA256_PassHash(inputtext, ACCOUNT_INFO[playerid][ac_SALT], password, sizeof password);
-            if (!strcmp(password, ACCOUNT_INFO[playerid][ac_PASS], false))
-            {
-                inline OnPlayerDataLoad()
-                {
-                    new rows;
-                    if (cache_get_row_count(rows))
-                    {
-                        if (rows)
-                        {
-                            new bool:isnull_crew;
-                            cache_get_value_name(0, "reg_date", ACCOUNT_INFO[playerid][ac_REG_DATE], 24);
-                            cache_get_value_name(0, "last_connection", ACCOUNT_INFO[playerid][ac_LAST_CONNECTION], 24);
-                            cache_get_value_name_int(0, "last_connection_timestamp", ACCOUNT_INFO[playerid][ac_LAST_CONNECTION_TIMESTAMP]);
-                            cache_get_value_name_int(0, "time_playing", ACCOUNT_INFO[playerid][ac_TIME_PLAYING]);
-                            cache_get_value_name_int(0, "level", ACCOUNT_INFO[playerid][ac_LEVEL]);
-                            cache_get_value_name_int(0, "rep", ACCOUNT_INFO[playerid][ac_REP]);
-                            cache_get_value_name_int(0, "doubt_channel", ACCOUNT_INFO[playerid][ac_DOUBT_CHANNEL]);
-                            cache_get_value_name_int(0, "time_for_rep", ACCOUNT_INFO[playerid][ac_TIME_FOR_REP]);
-                            cache_get_value_name_int(0, "admin_level", ACCOUNT_INFO[playerid][ac_ADMIN_LEVEL]);
-                            cache_get_value_name_int(0, "payday_rep", ACCOUNT_INFO[playerid][ac_PAYDAY_REP]);
-                            cache_get_value_name_int(0, "vip", ACCOUNT_INFO[playerid][ac_VIP]);
-                            cache_get_value_name(0, "vip_expire_date", ACCOUNT_INFO[playerid][ac_VIP_EXPIRE_DATE], 24);
-                            cache_get_value_name_int(0, "coins", PI[playerid][ac_COINS]);
-                            cache_get_value_name_int(0, "skin", PI[playerid][ac_SKIN]);
-                            cache_get_value_name_int(0, "cash", PI[playerid][ac_CASH]);
-                            cache_get_value_name_float(0, "pos_x", PI[playerid][ac_POS_X]);
-                            cache_get_value_name_float(0, "pos_y", PI[playerid][ac_POS_Y]);
-                            cache_get_value_name_float(0, "pos_z", PI[playerid][ac_POS_Z]);
-                            cache_get_value_name_float(0, "angle", PI[playerid][ac_ANGLE]);
-                            cache_get_value_name_int(0, "state", ACCOUNT_INFO[playerid][ac_STATE]);
-                            cache_get_value_name_int(0, "interior", PI[playerid][ac_INTERIOR]);
-                            cache_get_value_name_int(0, "local_interior", PI[playerid][ac_LOCAL_INTERIOR]);
-                            cache_get_value_name_int(0, "fight_style", PI[playerid][ac_FIGHT_STYLE]);
-                            cache_get_value_name_float(0, "health", PI[playerid][ac_HEALTH]);
-                            cache_get_value_name_float(0, "armour", PI[playerid][ac_ARMOUR]);
-                            cache_get_value_name_int(0, "gender", PI[playerid][ac_GENDER]);
-                            cache_get_value_name_float(0, "hungry", PI[playerid][ac_HUNGRY]);
-                            cache_get_value_name_float(0, "thirst", PI[playerid][ac_THIRST]);
-                            cache_get_value_name_int(0, "black_market_level", PI[playerid][ac_BLACK_MARKET_LEVEL]);
-                            cache_get_value_name_int(0, "wanted_level", PI[playerid][ac_WANTED_LEVEL]);
-                            cache_get_value_name_int(0, "police_jail_time", PI[playerid][ac_POLICE_JAIL_TIME]);
-                            cache_get_value_name_int(0, "police_duty", PI[playerid][ac_POLICE_DUTY]);
-                            cache_get_value_name_int(0, "police_jail_id", PI[playerid][ac_POLICE_JAIL_ID]);
-                            cache_get_value_name_int(0, "drive_license_points", PI[playerid][ac_DRIVE_LICENSE_POINTS]);
-                            cache_get_value_name_int(0, "bank_account", PI[playerid][ac_BANK_ACCOUNT]);
-                            cache_get_value_name_int(0, "bank_money", PI[playerid][ac_BANK_MONEY]);
-                            cache_get_value_name_int(0, "phone_number", PI[playerid][ac_PHONE_NUMBER]);
-                            cache_get_value_name_int(0, "phone_state", PI[playerid][ac_PHONE_STATE]);
-                            cache_get_value_name_int(0, "phone_visible_number", PI[playerid][ac_PHONE_VISIBLE_NUMBER]);
-                            cache_get_value_name_int(0, "gps", PI[playerid][ac_GPS]);
-                            cache_get_value_name_int(0, "maso", PI[playerid][ac_Maso]);
-                            cache_get_value_name_int(0, "mp3", PI[playerid][ac_MP3]);
-                            cache_get_value_name_int(0, "phone_resolver", PI[playerid][ac_PHONE_RESOLVER]);
-                            cache_get_value_name_int(0, "speakers", PI[playerid][ac_SPEAKERS]);
-                            cache_get_value_name_int(0, "mechanic_pieces", PI[playerid][ac_MECHANIC_PIECES]);
-                            cache_get_value_name_int(0, "fuel_drum", PI[playerid][ac_FUEL_DRUM]);
-                            cache_get_value_name_int(0, "seed_medicine", PI[playerid][ac_SEED_MEDICINE]);
-                            cache_get_value_name_int(0, "seed_cannabis", PI[playerid][ac_SEED_CANNABIS]);
-                            cache_get_value_name_int(0, "seed_crack", PI[playerid][ac_SEED_CRACK]);
-                            cache_get_value_name_int(0, "medicine", PI[playerid][ac_MEDICINE]);
-                            cache_get_value_name_int(0, "cannabis", PI[playerid][ac_CANNABIS]);
-                            cache_get_value_name_int(0, "crack", PI[playerid][ac_CRACK]);
-                            cache_get_value_name_int(0, "config_sounds", PI[playerid][ac_CONFIG_SOUNDS]);
-                            cache_get_value_name_int(0, "config_audio", PI[playerid][ac_CONFIG_AUDIO]);
-                            cache_get_value_name_int(0, "config_time", PI[playerid][ac_CONFIG_TIME]);
-                            cache_get_value_name_int(0, "config_hud", PI[playerid][ac_CONFIG_HUD]);
-                            cache_get_value_name_int(0, "config_admin", PI[playerid][ac_CONFIG_ADMIN]);
-                            cache_get_value_name_int(0, "config_secure_login", PI[playerid][ac_CONFIG_SECURE_LOGIN]);
-                            cache_get_value_name_int(0, "mute", PI[playerid][ac_MUTE]);
-                            cache_get_value_name_int(0, "placa_pd", PI[playerid][ac_PLACA_PD]);
-                            cache_get_value_name_int(0, "can_buy_bm", PI[playerid][ac_CAN_BUY_BM]);
-                            cache_is_value_name_null(0, "crew", isnull_crew);
-                            if (!isnull_crew) cache_get_value_name_int(0, "crew", PI[playerid][ac_CREW]);
-                            cache_get_value_name_int(0, "crew_rank", PI[playerid][ac_CREW_RANK]);
-                            cache_get_value_name_int(0, "mechanic_kits", PI[playerid][ac_MECHANIC_KITS]);
-                            cache_get_value_name_int(0, "medical_kits", PI[playerid][ac_MEDICAL_KITS]);
-                            CallLocalFunction("OnPlayerLogin", "i", playerid);
-                        }
-                        else Kick(playerid);
-                    }
-                    else Kick(playerid);
-                }
-                GameTextForPlayer(playerid, "~y~cargando...", 10000, 3);
-                mysql_format(srp_db, QUERY_BUFFER, sizeof QUERY_BUFFER, "SELECT * FROM player WHERE id = %d;", ACCOUNT_INFO[playerid][ac_ID]);
-                MySQL_TQueryInline(srp_db, using inline OnPlayerDataLoad, QUERY_BUFFER);
-            }
-            else // Error
-            {
-                PLAYER_TEMP[playerid][pt_BAD_LOGIN_ATTEMP] ++;
-                if (PLAYER_TEMP[playerid][pt_BAD_LOGIN_ATTEMP] > MAX_BAD_LOGIN_ATTEMPS) return Kick(playerid);
-                ShowDialog(playerid, dialogid);
-            }
-            return 1;
-        }
+        // Registro y login: core/account/account_auth.inc
+        case DIALOG_REGISTER: return Account_OnRegisterDialog(playerid, response, inputtext);
+        case DIALOG_REGISTER_EMAIL: return Account_OnRegisterEmailDialog(playerid, response, inputtext);
+        case DIALOG_LOGIN: return Account_OnLoginDialog(playerid, response, inputtext);
         case DIALOG_SECURE_LOGIN_INSERT_CODE: {
             if (!response) return Kick(playerid);
             if (!strlen(inputtext)) return ShowDialog(playerid, dialogid);
@@ -4586,10 +4427,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 if (!strlen(inputtext)) return ShowDialog(playerid, dialogid);
 
-                new password[64 + 1];
-                SHA256_PassHash(inputtext, ACCOUNT_INFO[playerid][ac_SALT], password, sizeof password);
-
-                if (!strcmp(password, ACCOUNT_INFO[playerid][ac_PASS], false))
+                if (Account_CheckPassword(playerid, inputtext))
                 {
                     ShowDialog(playerid, DIALOG_CHANGE_PASSWORD_PASS);
                     PLAYER_TEMP[playerid][pt_BAD_LOGIN_ATTEMP] = 0;
@@ -4607,15 +4445,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
         {
             if (response)
             {
-                if (strlen(inputtext) < MIN_PASS_LENGTH || strlen(inputtext) > MAX_PASS_LENGTH) return ShowDialog(playerid, dialogid);
+                if (!Account_IsValidPassword(playerid, inputtext)) return ShowDialog(playerid, dialogid);
 
-                new salt[16];
-                getRandomSalt(salt);
-                format(ACCOUNT_INFO[playerid][ac_SALT], 16, "%s", salt);
-                SHA256_PassHash(inputtext, ACCOUNT_INFO[playerid][ac_SALT], ACCOUNT_INFO[playerid][ac_PASS], 64 + 1);
-
-                mysql_format(srp_db, QUERY_BUFFER, sizeof QUERY_BUFFER, "UPDATE player SET salt = '%e', pass = '%e' WHERE id = %d;", ACCOUNT_INFO[playerid][ac_SALT], ACCOUNT_INFO[playerid][ac_PASS], ACCOUNT_INFO[playerid][ac_ID]);
-                mysql_tquery(srp_db, QUERY_BUFFER);
+                Account_SetPassword(playerid, inputtext);
+                Account_SaveCredentials(playerid);
 
                 SendNotification(playerid, "Tu contraseña ha sido cambiada correctamente.");
             }

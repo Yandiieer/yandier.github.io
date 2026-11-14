@@ -201,7 +201,6 @@ enum Temp_Enum
     pt_LAST_SHOT_ROBBERY,
     bool:pt_READING_GUIDE,
     pt_GUIDE_STEP,
-    pt_PASSWD[24],
     bool:pt_CONTROL,
     pt_SELECTING_STYLE,
     pt_SELECTED_STYLE,

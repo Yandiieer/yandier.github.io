@@ -52,19 +52,15 @@ CMD:web(playerid, params[])
 
 CMD:csave(playerid, params[])
 {
-    if (gettime() < PLAYER_TEMP[playerid][pt_SAVE_ACCOUNT_TIME] + 30)
+    if (gettime() < PLAYER_TEMP[playerid][pt_SAVE_ACCOUNT_TIME] + ACCOUNT_CSAVE_COOLDOWN)
     {
-        new time = (30-(gettime()-PLAYER_TEMP[playerid][pt_SAVE_ACCOUNT_TIME]));
-        SendFormatNotification(playerid, "Tienes que esperar %s minutos para volver a guardar tus datos.", TimeConvert(time));
+        new time = (ACCOUNT_CSAVE_COOLDOWN - (gettime() - PLAYER_TEMP[playerid][pt_SAVE_ACCOUNT_TIME]));
+        SendFormatNotification(playerid, "Tienes que esperar %s para volver a guardar tus datos.", TimeConvert(time));
         return 1;
     }
 
-    SavePlayerData(playerid);
-    SavePlayerVehicles(playerid, false);
-    SavePlayerToys(playerid);
-    SavePlayerWeaponsData(playerid);
-    SavePlayerWorkLevels(playerid);
-    PLAYER_TEMP[playerid][pt_SAVE_ACCOUNT_TIME] = gettime();
+    Account_SyncLivePosition(playerid);
+    Account_SaveAll(playerid);
 
     SendNotification(playerid, "Datos de la cuenta guardados.");
     return 1;

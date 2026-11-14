@@ -172,6 +172,9 @@ L1:
 #include "core/player/player_gps_h"
 #include "core/player/player_skins_h"
 
+// Cuentas (registro, login, guardado)
+#include "core/account/account_h"
+
 #include "core/door/door_h"
 #include "core/properties/hospital_h"
 #include "core/properties/fuel_station_h"
@@ -226,6 +229,7 @@ L1:
 #include "core/main/callbacks"
 #include "core/dialog/callbacks_with_dialog" // se tiene que modular
 #include "core/main/functions"
+#include "core/account/account" // registro, login, carga y guardado
 
 #include "core/dialog/response" // se tiene que modular
 
@@ -352,12 +356,7 @@ public OnGameModeExit()
         if (IsPlayerConnected(i) && PLAYER_TEMP[i][pt_USER_LOGGED])
         {
             format(ACCOUNT_INFO[i][ac_LAST_CONNECTION], 24, "%s", date);
-            SavePlayerData(i);
-            SavePlayerVehicles(i, false);
-            SavePlayerToys(i);
-            SavePlayerWeaponsData(i);
-            SavePlayerWorkLevels(i);
-            PLAYER_TEMP[i][pt_SAVE_ACCOUNT_TIME] = gettime();
+            Account_SaveAll(i);
         }
     }
     mysql_close(srp_db);

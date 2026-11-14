@@ -140,96 +140,7 @@ public OnPlayerRequestClass(playerid, classid)
 
                     if (continue_proccess)
                     {
-                        inline OnPlayerCheck()
-                        {
-                            if (cache_get_row_count(rows))
-                            {
-                                TextDrawShowForPlayer(playerid, Textdraws[textdraw_LOAD_SCREEN][2]);
-                                TextDrawShowForPlayer(playerid, Textdraws[textdraw_LOAD_SCREEN][3]);
-
-                                if (rows)
-                                {
-                                    cache_get_value_name_int(0, "id", ACCOUNT_INFO[playerid][ac_ID]);
-                                    cache_get_value_name(0, "ip", ACCOUNT_INFO[playerid][ac_IP], 16);
-                                    cache_get_value_name(0, "email", ACCOUNT_INFO[playerid][ac_EMAIL], 32);
-                                    cache_get_value_name(0, "salt", ACCOUNT_INFO[playerid][ac_SALT], 16);
-                                    cache_get_value_name(0, "pass", ACCOUNT_INFO[playerid][ac_PASS], 65);
-                                    cache_get_value_name_int(0, "config_secure_login", PI[playerid][ac_CONFIG_SECURE_LOGIN]);
-
-                                    mysql_format(srp_db, QUERY_BUFFER, sizeof QUERY_BUFFER, "UPDATE player SET connected = 1, playerid = %d WHERE id = %d;", playerid, ACCOUNT_INFO[playerid][ac_ID]);
-                                    mysql_tquery(srp_db, QUERY_BUFFER);
-                                    PLAYER_TEMP[playerid][pt_USER_EXIST] = true;
-                                }
-                                else PLAYER_TEMP[playerid][pt_USER_EXIST] = false;
-
-                                GameTextForPlayer(playerid, "_", 500, 3);
-                                if (PLAYER_TEMP[playerid][pt_USER_EXIST])
-                                {
-                                    new intro = random(sizeof(Intro_Info));
-                                    SetPlayerVirtualWorld(playerid, WORLD_INTRO);
-
-                                    TextDrawShowForPlayer(playerid, Textdraws[textdraw_LOAD_SCREEN][1]);
-                                    InterpolateCameraPos(playerid,
-                                        Intro_Info[intro][intro_info_CAM_X],
-                                        Intro_Info[intro][intro_info_CAM_Y],
-                                        Intro_Info[intro][intro_info_CAM_Z],
-                                        Intro_Info[intro][intro_info_CAM_RX],
-                                        Intro_Info[intro][intro_info_CAM_RY],
-                                        Intro_Info[intro][intro_info_CAM_RZ],
-                                        10000,
-                                        CAMERA_MOVE);
-                                    InterpolateCameraLookAt(playerid,
-                                        Intro_Info[intro][intro_info_CAM_LOOK_AT_X],
-                                        Intro_Info[intro][intro_info_CAM_LOOK_AT_Y],
-                                        Intro_Info[intro][intro_info_CAM_LOOK_AT_Z],
-                                        Intro_Info[intro][intro_info_CAM_LOOK_AT_RX],
-                                        Intro_Info[intro][intro_info_CAM_LOOK_AT_RY],
-                                        Intro_Info[intro][intro_info_CAM_LOOK_AT_RZ],
-                                        10000,
-                                        CAMERA_MOVE);
-                                    SetPlayerMyWeather(playerid, Intro_Info[intro][intro_info_WEATHER]);
-                                    SetPlayerMyTime(playerid, Intro_Info[intro][intro_info_HOUR], 0);
-
-                                    if (!PI[playerid][ac_CONFIG_SECURE_LOGIN] && strcmp(PLAYER_TEMP[playerid][pt_IP], ACCOUNT_INFO[playerid][ac_IP])) // La IP actual no es la misma IP de la ï¿½ltima conexiï¿½n
-                                    {
-                                        SendNotification(playerid, "Tu direcciï¿½n IP ha cambiado desde tu ï¿½ltima conexiï¿½n.");
-                                    }
-                                    ShowDialog(playerid, DIALOG_LOGIN);
-                                }
-                                else
-                                {
-                                    TextDrawShowForPlayer(playerid, Textdraws[textdraw_LOAD_SCREEN][0]);
-                                    // Nuevo usuario
-                                    PLAYER_TEMP[playerid][pt_REGISTER_ACTOR] = CreateActor(Intro_Skins[0][0], 444.200225, 514.112182, 1001.419494, 0.939619); //ACTOR DE LA HABITACION DE LA INTRO
-                                    SetActorVirtualWorld(PLAYER_TEMP[playerid][pt_REGISTER_ACTOR], playerid + 10);
-                                    ApplyActorAnimation(PLAYER_TEMP[playerid][pt_REGISTER_ACTOR], "INT_SHOP", "shop_loop", 4.1, 1, 1, 1, 0, 0);
-
-                                    SetPlayerVirtualWorld(playerid, playerid + 10);
-                                    InterpolateCameraPos(playerid,
-                                        447.1717,
-                                        512.9380,
-                                        1001.6884,
-                                        447.1717,
-                                        512.9380,
-                                        1001.6884,
-                                        4000);
-                                    InterpolateCameraLookAt(playerid,
-                                        446.4043,
-                                        513.5767,
-                                        1001.7037,
-                                        446.4043,
-                                        513.5767,
-                                        1001.7037,
-                                        4000);
-                                    SetPlayerInterior(playerid, 12);
-
-                                    ShowDialog(playerid, DIALOG_REGISTER);
-                                }
-                            }
-                            else Kick(playerid);
-                        }
-                        mysql_format(srp_db, QUERY_BUFFER, sizeof QUERY_BUFFER, "SELECT id, ip, email, salt, pass, config_secure_login FROM player WHERE name = '%e';", PLAYER_TEMP[playerid][pt_NAME]);
-                        MySQL_TQueryInline(srp_db,  using inline OnPlayerCheck, QUERY_BUFFER);
+                        Account_Check(playerid); // core/account/account_auth.inc
                     }
                 }
                 else Kick(playerid);
@@ -439,7 +350,7 @@ public OnPlayerClickPlayerTextDraw(playerid, PlayerText:playertextid)
             SetPlayerInterior(playerid, PI[playerid][ac_INTERIOR]);
 
             //
-            RegisterNewPlayer(playerid);
+            Account_Create(playerid);
             return 1;
         }
         else if (playertextid == PlayerTextdraws[playerid][ptextdraw_REGISTER_SKIN][7]) // Siguiente ropa

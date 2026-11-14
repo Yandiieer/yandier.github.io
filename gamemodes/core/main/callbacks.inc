@@ -170,11 +170,7 @@ public OnPlayerDisconnect(playerid, reason)
             UpdatePlayerWorldInfo(playerid);
 
             getDateTime(ACCOUNT_INFO[playerid][ac_LAST_CONNECTION]);
-            SavePlayerData(playerid);
-            SavePlayerVehicles(playerid, true);
-            SavePlayerToys(playerid);
-            SavePlayerWeaponsData(playerid);
-            SavePlayerWorkLevels(playerid);
+            Account_SaveAll(playerid, true);
 
             //msg
             new disconnect_message[128];
