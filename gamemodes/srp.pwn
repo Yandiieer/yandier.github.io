@@ -43,13 +43,9 @@ L1:
     #emit    zero    cellmin
 }
 
-/*
- * Modos de debug:
- *  - 0: No saldrá ningún mensaje de debug ni en la consola ni en el juego.
- *  - 1: Saldrán mensajes de debug solamente en la consola.
- *  - 2: Saldrán mensajes de debug en la consola y en el juego.
-*/
-#define DEBUG_MODE 2
+// Toda la configuración editable (nombre, colores, slots, DEBUG_MODE, límites...)
+// está en gamemodes/CONFIGURACION.inc
+#include "CONFIGURACION"
 
 #if DEBUG_MODE != 0
     #pragma option -d3
@@ -61,7 +57,7 @@ L1:
 #include <a_http>
 //MODIFICAR SEGUN SLOTS DEL SERVIDOR
 #undef MAX_PLAYERS
-#define MAX_PLAYERS 500
+#define MAX_PLAYERS SERVER_SLOTS // se cambia en CONFIGURACION.inc
 
 #include <a_mysql>
 
@@ -98,36 +94,10 @@ L1:
 
 */
 
-#define SERVER_VERSION    "3.0.0"
-#define VERSION_DATE    "30/08/2020"
-
-/* Config */
-#define SERVER_NAME            "Super Roleplay"
-#define SERVER_SHORT_NAME    "Super"
-#define SERVER_GAMEMODE        "SRP2 "SERVER_VERSION" - Roleplay español"
-#define SERVER_LANGUAGE        "Español - Spanish"
-#define SERVER_WEBSITE        "yourwebsite"
-#define SERVER_HOSTNAME     "Super Roleplay 2"
-#define SERVER_COIN            "Coins"
-
-#define PRIMARY_COLOR "fce679"
-#define SILVER_COLOR "d1d1d1"
-#define RED_COLOR "FF6633"
-#define GREEN_COLOR "98f442"
-#define BLUE_COLOR "90C3D4"
-
-//SECURE LOGIN
-#define SECURE_LOGIN_IP_DAYS 30
-#define SECURE_LOGIN_REQUEST_URL "api.yourwebsite/auth/auth-request-code"
-#define SECURE_LOGIN_CHECK_URL "api.yourwebsite/auth/auth-check-code"
-#define SECURE_LOGIN_TIME 180000 //3 min en logear o kick
+// (nombre, colores, URLs y login: ver CONFIGURACION.inc)
 #define KEY_F                                ( 16 )
 // basura innecesaria, se espera por cambio
 #define callbackp:%0(%1)                        forward %0(%1) ; public %0(%1)
-//YOUTUBE
-#define SEARCH_YT_PATH "yt.yourwebsite/search"
-#define DOWNLOAD_YT_PATH "yt.yourwebsite/download"
-#define DOWNLOADED_YT_PATH "https://yt.yourwebsite/mp3/"
 
  /*
 
@@ -230,6 +200,7 @@ L1:
 #include "core/dialog/callbacks_with_dialog" // se tiene que modular
 #include "core/main/functions"
 #include "core/account/account" // registro, login, carga y guardado
+#include "core/facil/facil" // funciones fáciles en español (DarDinero, Aviso, Teletransportar...)
 
 #include "core/dialog/response" // se tiene que modular
 
@@ -263,6 +234,12 @@ Y88b  d88P 888  888  888 Y88b 888      X88
 #include "core/administration/helper/helper_cmds"
 
 #include "core/main/commands" // se tiene que modular
+
+// ---------------------------------------------------------------------------
+// TU CÓDIGO: escribe tus comandos y eventos aquí, sin tocar core/
+// ---------------------------------------------------------------------------
+#include "personalizado/comandos"
+#include "personalizado/eventos"
 
 /*
     888b     d888          d8b

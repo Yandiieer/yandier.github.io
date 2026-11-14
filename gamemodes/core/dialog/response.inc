@@ -1915,7 +1915,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if (player_properties >= MAX_NU_PROPERTIES) return SendNotification(playerid, "El comprador no puede adquirir más propiedades.");
                 }
 
-                if (PI[inputtext[0]][ac_LEVEL] < 2) return SendNotification(playerid, "Error, el comprador necesita ser al menos nivel 2.");
+                if (ACCOUNT_INFO[inputtext[0]][ac_LEVEL] < 2) return SendNotification(playerid, "Error, el comprador necesita ser al menos nivel 2.");
                 if (PLAYER_TEMP[playerid][pt_NOTARY_PRICE] > PI[inputtext[0]][ac_BANK_MONEY]) return SendNotification(playerid, "Error, el comprador no tiene el dinero que pides.");
 
                 SendNotification(playerid, "Tu oferta se ha enviado al comprador, espera para ver si la acepta.");
@@ -2115,7 +2115,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     if (pvehicles >= MAX_NU_VEHICLES) return SendNotification(playerid, "El comprador no puede adquirir más vehículos.");
                 }
 
-                if (PI[inputtext[0]][ac_LEVEL] < 2) return SendNotification(playerid, "Error, el comprador necesita ser al menos nivel 2.");
+                if (ACCOUNT_INFO[inputtext[0]][ac_LEVEL] < 2) return SendNotification(playerid, "Error, el comprador necesita ser al menos nivel 2.");
                 if (PLAYER_TEMP[playerid][pt_NOTARY_PRICE] > PI[inputtext[0]][ac_BANK_MONEY]) return SendNotification(playerid, "Error, el comprador no tiene el dinero que pides.");
 
                 if (PI[inputtext[0]][ac_DRIVE_LICENSE_POINTS] == 0)

@@ -43,11 +43,9 @@ new ACCOUNT_INFO[MAX_PLAYERS][account_Enum]; // AI (AccountInfo)
 
 enum enum_PI
 {
-    ac_LEVEL,
-    ac_REP,
+    // (nivel, reputación y canal de dudas están en ACCOUNT_INFO)
     ac_CONNECTED,
     ac_PLAYERID,
-    ac_DOUBT_CHANNEL,
     ac_COINS,
     ac_SKIN,
     ac_CASH,

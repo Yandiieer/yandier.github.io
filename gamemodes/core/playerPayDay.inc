@@ -5,10 +5,10 @@ PlayerPayday(playerid)
         dialog_header[630],
         dialog_string[140],
         date[24],
-        money = 300 * ACCOUNT_INFO[playerid][ac_LEVEL];
+        money = PAYDAY_POR_NIVEL * ACCOUNT_INFO[playerid][ac_LEVEL]; // valores en CONFIGURACION.inc
 
-    if (money > 4500) money = 4500;
-    money += minrand(100, 200);
+    if (money > PAYDAY_MAXIMO) money = PAYDAY_MAXIMO;
+    money += minrand(PAYDAY_EXTRA_MIN, PAYDAY_EXTRA_MAX);
 
     getDateTime(date);
 

@@ -20,11 +20,5 @@
 #endif
 #define account_h_included
 
-// Autoguardado periódico de cada jugador logeado (milisegundos).
-#define ACCOUNT_AUTOSAVE_INTERVAL   600000  // 10 minutos
-
-// Si la cuenta se guardó hace menos de esto (segundos), el autoguardado se salta.
-#define ACCOUNT_AUTOSAVE_MIN_GAP    60
-
-// Espera entre usos de /csave (segundos).
-#define ACCOUNT_CSAVE_COOLDOWN      30
+// Los valores (ACCOUNT_AUTOSAVE_INTERVAL, ACCOUNT_CSAVE_COOLDOWN...) están en
+// gamemodes/CONFIGURACION.inc, sección 4.

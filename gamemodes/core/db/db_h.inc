@@ -20,7 +20,7 @@ new
     bool:server_loaded,
     MySQL:srp_db,
 
-    Float:New_User_Pos[4] = {1773.307250, -1896.441040, 13.551166, 270.0},
+    Float:New_User_Pos[4] = {SPAWN_NUEVO_X, SPAWN_NUEVO_Y, SPAWN_NUEVO_Z, SPAWN_NUEVO_ANGULO}, // CONFIGURACION.inc
     Mechanic_Areas[1],
     Lumberjack_Area,
     Farmer_Area,

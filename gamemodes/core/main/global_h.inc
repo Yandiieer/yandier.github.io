@@ -692,8 +692,7 @@ enum RuleInfo
     Rule_Pages,
 }
 
-#define MIN_PASS_LENGTH    6
-#define MAX_PASS_LENGTH    18
+// MIN_PASS_LENGTH / MAX_PASS_LENGTH -> CONFIGURACION.inc
 
 forward OnPlayerRegister(playerid);
 forward OnPlayerLogin(playerid);

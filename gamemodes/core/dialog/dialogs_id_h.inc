@@ -250,5 +250,7 @@ enum
     DIALOG_GRAFFITI_ETEXT_TEXT,
     DIALOG_GRAFFITI_ETEXT_FONT,
     DIALOG_GRAFFITI_ETEXT_SIZE,
-    DIALOG_GRAFFITI_ETEXT_COLOR
+    DIALOG_GRAFFITI_ETEXT_COLOR,
+
+    // --- Tus diálogos: agrégalos debajo de esta línea, cada uno terminado en coma ---
 }

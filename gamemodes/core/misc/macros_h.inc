@@ -29,28 +29,9 @@
 #define HOLDING(%0) \
     ((newkeys & (%0)) == (%0))
 
-#define MAX_BAD_LOGIN_ATTEMPS 3    // maximos intentos de contraseñas erroneas
-#define REP_MULTIPLIER 3    //12 rep * nivel para subir, si es nivel 1 necesita 12 rep para subir a nivel 2
-#define TIME_FOR_REP 1500000 // 25 minutos para obtener reputacion
-#define REP_FOR_PAYDAY 2    // payday cada 2 reputaciones
-#define CMD_LOGGIN 1 // log de comandos
+// MAX_BAD_LOGIN_ATTEMPS, REP_*, TIME_FOR_REP, CMD_LOGGIN -> CONFIGURACION.inc
 
-/* LIMITES JUGADOR */
-    // Normal User
-#define MAX_NU_VEHICLES        2
-#define MAX_NU_PROPERTIES    1
-#define MAX_NU_WORKS        1
-#define MAX_NU_TOYS            3
-#define MAX_NU_VOBJECTS        3
-#define MAX_NU_PROPERTY_OBJECTS 150
-
-    // VIP
-#define MAX_SU_VEHICLES        4
-#define MAX_SU_PROPERTIES    4
-#define MAX_SU_WORKS        3
-#define MAX_SU_TOYS            6
-#define MAX_SU_VOBJECTS        10
-#define MAX_SU_PROPERTY_OBJECTS 250
+/* LIMITES JUGADOR (MAX_NU_* / MAX_SU_*) -> CONFIGURACION.inc */
 
 #define MAX_PLANTS    500
 

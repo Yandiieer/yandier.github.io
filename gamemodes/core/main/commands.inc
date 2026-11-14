@@ -1000,7 +1000,7 @@ CMD:dar(playerid, params[])
 
             if (!PLAYER_WEAPONS[playerid][extra][player_weapon_VALID]) return SendNotification(playerid, "No tienes nigún arma en ese slot.");
 
-            if (PI[to_playerid][ac_LEVEL] < 2) return SendNotification(playerid, "La otra persona tiene que ser al menos nivel 2.");
+            if (ACCOUNT_INFO[to_playerid][ac_LEVEL] < 2) return SendNotification(playerid, "La otra persona tiene que ser al menos nivel 2.");
             if (PLAYER_WEAPONS[to_playerid][extra][player_weapon_VALID])
             {
                 PlayerPlaySoundEx(playerid, 1085, 0.0, 0.0, 0.0);
@@ -1138,7 +1138,7 @@ CMD:vender(playerid, params[])
 
             if (!PLAYER_WEAPONS[playerid][ PLAYER_TEMP[to_playerid][pt_TRICK_SELLER_EXTRA] ][player_weapon_VALID]) return SendNotification(playerid, "No tienes nigún arma en ese slot.");
 
-            if (PI[to_playerid][ac_LEVEL] < 2) return SendNotification(playerid, "La otra persona tiene que ser al menos nivel 2.");
+            if (ACCOUNT_INFO[to_playerid][ac_LEVEL] < 2) return SendNotification(playerid, "La otra persona tiene que ser al menos nivel 2.");
 
             SendFormatNotification(playerid, "Le has ofrecido una venta a ~g~%s~w~, espera a ver si la acepta.", PLAYER_TEMP[to_playerid][pt_RP_NAME]);
             ShowDialog(to_playerid, DIALOG_TRICKS_WEAPON);

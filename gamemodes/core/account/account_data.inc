@@ -33,7 +33,7 @@ SetPiDefaultValues(playerid)
     PI[playerid][ac_CONNECTED] = 1;
     PI[playerid][ac_PLAYERID] = playerid;
     PI[playerid][ac_SKIN] = Intro_Skins[0][0];
-    PI[playerid][ac_CASH] = minrand(5000, 7000);
+    PI[playerid][ac_CASH] = minrand(DINERO_INICIAL_MIN, DINERO_INICIAL_MAX);
     PI[playerid][ac_POS_X] = New_User_Pos[0];
     PI[playerid][ac_POS_Y] = New_User_Pos[1];
     PI[playerid][ac_POS_Z] = New_User_Pos[2];

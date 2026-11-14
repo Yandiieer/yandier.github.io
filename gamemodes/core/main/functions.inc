@@ -1238,8 +1238,8 @@ ShowPlayerStats(playerid, pid)
     new Float:hours;
     ConvertTime_SecondsToHoursFloat(ACCOUNT_INFO[pid][ac_TIME_PLAYING], hours);
 
-    new next_rep[24], neccessary_rep = PI[pid][ac_LEVEL] * REP_MULTIPLIER;
-    if (PI[pid][ac_REP] < neccessary_rep)
+    new next_rep[24], neccessary_rep = ACCOUNT_INFO[pid][ac_LEVEL] * REP_MULTIPLIER;
+    if (ACCOUNT_INFO[pid][ac_REP] < neccessary_rep)
     {
         new time = (ACCOUNT_INFO[pid][ac_TIME_FOR_REP] - (gettime() * 1000 - PLAYER_TEMP[pid][pt_TIME_PASSED_LAST_REP])) / 1000;
         if (time < 3) time = 3;
@@ -5041,7 +5041,7 @@ SendMessageToDoubtChannel(playerid, message[])
             if (
                 (PLAYER_TEMP[i][pt_GAME_STATE] == GAME_STATE_NORMAL ||
                 PLAYER_TEMP[i][pt_GAME_STATE] == GAME_STATE_DEAD) &&
-            PI[i][ac_DOUBT_CHANNEL])
+            ACCOUNT_INFO[i][ac_DOUBT_CHANNEL])
             {
                 SendClientMessage(i, 0x77c7ffFF, str);
             }
@@ -5059,11 +5059,11 @@ ShowPlayerSkills(playerid, pid)
     format(caption, sizeof caption, "Experiencia de %s", PLAYER_TEMP[pid][pt_RP_NAME]);
 
     strcat(dialog, "{"#BLUE_COLOR"}CUENTA\n");
-    format(line_str, sizeof line_str, "{"#SILVER_COLOR"}Nivel: {"#PRIMARY_COLOR"}%d\n", PI[pid][ac_LEVEL]);
+    format(line_str, sizeof line_str, "{"#SILVER_COLOR"}Nivel: {"#PRIMARY_COLOR"}%d\n", ACCOUNT_INFO[pid][ac_LEVEL]);
     strcat(dialog, line_str);
 
-    new neccessary_rep = PI[pid][ac_LEVEL] * REP_MULTIPLIER;
-    format(line_str, sizeof line_str, "{"#SILVER_COLOR"}Reputación: {"#PRIMARY_COLOR"}%d/%d\n", PI[pid][ac_REP], neccessary_rep);
+    new neccessary_rep = ACCOUNT_INFO[pid][ac_LEVEL] * REP_MULTIPLIER;
+    format(line_str, sizeof line_str, "{"#SILVER_COLOR"}Reputación: {"#PRIMARY_COLOR"}%d/%d\n", ACCOUNT_INFO[pid][ac_REP], neccessary_rep);
     strcat(dialog, line_str);
 
     new Float:hours;

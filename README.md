@@ -8,6 +8,12 @@ Super Roleplay 3
 
 An OPEN:MP roleplay gamemode originally written and released by [Andri1](https://sampforum.blast.hk/member.php?action=profile&uid=106967), now maintained by Neetoons and contributors.
 
+## Empieza aquí (español)
+- [Guía para programar la GM desde cero](docs/GUIA.md)
+- [Índice: todos los comandos, diálogos, variables y funciones](docs/INDICE.md)
+- Configuración del servidor: [`gamemodes/CONFIGURACION.inc`](gamemodes/CONFIGURACION.inc)
+- Tus comandos y eventos: [`gamemodes/personalizado/`](gamemodes/personalizado/)
+
 ## Features
 - [Admin Commands](https://github.com/neetoons/samp-super-roleplay/blob/main/docs/admin_commands.md)
 - [Anticheat List](https://github.com/neetoons/samp-super-roleplay/blob/main/docs/anticheats.md)
